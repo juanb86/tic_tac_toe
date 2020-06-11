@@ -49,3 +49,7 @@ ul {
 .game-info {
   margin-left: 20px;
 }
+
+.listBtn:focus {
+  font-weight: bold;
+}

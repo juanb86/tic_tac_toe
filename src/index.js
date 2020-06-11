@@ -23,32 +23,22 @@ class Board extends React.Component {
     return (
       <Square
         value={this.props.squares[i]}
-        selected={this.props.squares[10] == i}
+        selected={this.props.squares[10] === i}
         onClick={() => this.props.onClick(i)}
       />
     );
   }
 
+  generateRow(r) {
+    const places = [0, 1, 2];
+    return places.map((p) => this.renderSquare(p + 3 * r));
+  }
+
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    const rows = [0, 1, 2];
+    return rows.map((r) => (
+      <div className="board-row">{this.generateRow(r)}</div>
+    ));
   }
 }
 
@@ -104,7 +94,9 @@ class Game extends React.Component {
         : "Go to game start";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button className="listBtn" onClick={() => this.jumpTo(move)}>
+            {desc}
+          </button>
         </li>
       );
     });
