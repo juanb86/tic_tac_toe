@@ -23,7 +23,7 @@ class Board extends React.Component {
     return (
       <Square
         value={this.props.squares[i]}
-        selected={this.props.squares[10] === i}
+        selected={this.props.squares[10] === i || (this.props.win && this.props.win.indexOf(i)!=-1)}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -102,8 +102,12 @@ class Game extends React.Component {
     });
 
     let status;
+    let win = null;
     if (winner) {
-      status = "Winner " + winner;
+      status = "Winner " + winner.winner;
+      win = winner.lines;
+    } else if (this.state.stepNumber==9){
+      status = "Draw";
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
@@ -114,6 +118,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            win={win}
           />
         </div>
         <div className="game-info">
@@ -139,7 +144,10 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return ({
+        winner:squares[a],
+        lines: [a,b,c],
+      });
     }
   }
   return null;
